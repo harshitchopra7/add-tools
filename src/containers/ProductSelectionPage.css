@@ -32,7 +32,7 @@
 .product_selection_right_desc1 {
   margin: 20px 0;
   font-size: 30px;
-  font-weight: 700;
+  font-weight: bolder !important;
 }
 .product_selection_right_input > input {
   border: none;
