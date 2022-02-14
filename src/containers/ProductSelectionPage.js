@@ -2,29 +2,29 @@ import React, { useState } from "react";
 import "./ProductSelectionPage.css";
 import ProductSelectionLeft from "../components/ProductSelectionLeft/ProductSelectionLeft";
 import Button from "../components/Button/Button";
+import { optionsData } from "../data/optionsData";
+import Options from "../components/Options/Options";
 
 function ProductSelectionPage() {
 
     const [tools, setTools] = useState([]);
     const [toolInput, setToolInput] = useState("");
-
-    const addTool = (e) => {
-        e.preventDefault()
-        if (toolInput.length > 0) {
-            if(tools.length <= 4) {
-                setTools([...tools, {name: toolInput, image: getImage(toolInput)}])
-                var disableOption = document.getElementById(toolInput)
-                disableOption.setAttribute("disabled", true)
-            }
-            else {
-                alert("Cannot add more than 4 tools")
-            }
-            setToolInput("")
-        }
-    }
+    const [filteredData, setFilteredData] = useState([]);
+    const [elements, setElements] = useState([]);
+    const [deselected, setDeselected] = useState(false);
 
     const toolInputHandler = (e) => {
-        setToolInput(e.target.value)
+        const searchWord = e.target.value;
+        setToolInput(searchWord);
+        const newFilter = optionsData.filter((value) => {
+          return value.name.toLowerCase().includes(searchWord.toLowerCase());
+        });
+    
+        if (searchWord === "") {
+          setFilteredData([]);
+        } else {
+          setFilteredData(newFilter);
+        }
     }
 
     const getImage = (name) => {
@@ -40,6 +40,21 @@ function ProductSelectionPage() {
         }
     }
 
+    const addTool = (name) => {
+        if (!elements.includes(name)) {
+            console.log('alread')
+            if(tools.length <= 4) {
+                console.log("[...tools, {name: name, image: getImage(name)}]", [...tools, {name: name, image: getImage(name)}])
+                setTools([...tools, {name: name, image: getImage(name)}])
+                elements.push(name)
+            }
+            else {
+                alert("Cannot add more than 4 tools")
+            }
+            setToolInput("")
+        }
+    }
+
   return (
     <div className="product_selection_page">
         <div className="product_selection_page_left">
@@ -49,6 +64,8 @@ function ProductSelectionPage() {
                 filled={tools.length}
                 notFilled={4-tools.length}
                 plus_logo="https://img.icons8.com/external-dreamstale-lineal-dreamstale/15/000000/external-plus-science-education-dreamstale-lineal-dreamstale.png" 
+                setDeselected={setDeselected}
+                elements={elements}
             /> 
         </div>
         <div className="product_selection_page_right">
@@ -63,23 +80,28 @@ function ProductSelectionPage() {
                     <p>You'll be able to add as many as you need later but for now let's add four.</p>
                 </div>
             </div>
+
             <div className="product_selection_right_input">
-                <input list="browsers" 
+                <input
                     placeholder="Search for any software" 
-                    name="browser" 
-                    id="browser" 
-                    value={toolInput}
-                    onChange={toolInputHandler}
+                    onChange={toolInputHandler} 
+                    value={toolInput} 
                 />
-                <datalist className="product_selection_right_options" id="browsers">
-                    <option id="Notion" value="Notion">Notion</option>
-                    <option id="Jira" value="Jira">Jira</option>
-                    <option id="Slack" value="Slack">Slack</option>
-                    <option id="Ms Azure" value="Ms Azure">Ms Azure</option>
-                </datalist>
+                <div className="product_selection_right_options">
+                    {true && filteredData.map((val) => (
+                        <Options 
+                            name={val.name} 
+                            image={val.image} 
+                            onClick={() => addTool(val.name)} 
+                            alreadyAdded={elements.includes(val.name)}
+                            tools={tools}
+                        />
+                    ))}
+                </div> 
             </div>
+            
             <div className="product_selection_right_button">
-                <Button disabled={toolInput.length === 0} onClick={addTool} />
+                <Button disabled={tools.length === 0} />
             </div>
             </div>
         </div>

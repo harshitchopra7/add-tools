@@ -2,14 +2,13 @@ import React from "react";
 import ToolsContainer from "../ToolsContainer/ToolsContainer";
 import "./ProductSelectionLeft.css";
 
-function ProductSelectionLeft({ plus_logo, notFilled, tools, setTools }) {
+function ProductSelectionLeft({ plus_logo, notFilled, tools, setTools, elements }) {
 
   const deleteTool = (i, option) => {
     tools.splice(i, 1)
     setTools([...tools])
     console.log("option", option)
-    var enableOption = document.getElementById(option)
-    enableOption.removeAttribute("disabled")
+    elements.splice(i, 1)
   }
   
   return (
