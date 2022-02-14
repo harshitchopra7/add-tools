@@ -13,6 +13,8 @@ function ProductSelectionPage() {
         if (toolInput.length > 0) {
             if(tools.length <= 4) {
                 setTools([...tools, {name: toolInput, image: getImage(toolInput)}])
+                var disableOption = document.getElementById(toolInput)
+                disableOption.setAttribute("disabled", true)
             }
             else {
                 alert("Cannot add more than 4 tools")
@@ -70,14 +72,14 @@ function ProductSelectionPage() {
                     onChange={toolInputHandler}
                 />
                 <datalist className="product_selection_right_options" id="browsers">
-                    <option value="Notion">Notion</option>
-                    <option value="Jira">Jira</option>
-                    <option value="Slack">Slack</option>
-                    <option value="Ms Azure">Ms Azure</option>
+                    <option id="Notion" value="Notion">Notion</option>
+                    <option id="Jira" value="Jira">Jira</option>
+                    <option id="Slack" value="Slack">Slack</option>
+                    <option id="Ms Azure" value="Ms Azure">Ms Azure</option>
                 </datalist>
             </div>
             <div className="product_selection_right_button">
-                <Button onClick={addTool} />
+                <Button disabled={toolInput.length === 0} onClick={addTool} />
             </div>
             </div>
         </div>

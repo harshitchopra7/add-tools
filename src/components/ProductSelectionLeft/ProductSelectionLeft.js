@@ -4,22 +4,25 @@ import "./ProductSelectionLeft.css";
 
 function ProductSelectionLeft({ plus_logo, notFilled, tools, setTools }) {
 
-  const deleteTool = (i) => {
+  const deleteTool = (i, option) => {
     tools.splice(i, 1)
     setTools([...tools])
+    console.log("option", option)
+    var enableOption = document.getElementById(option)
+    enableOption.removeAttribute("disabled")
   }
   
   return (
     <div className="product_selection_container">
       <div className="product_selection">
         {tools && tools.map((elem, i) =>
-              <ToolsContainer key={i} logo={elem.image} name={elem.name} isEmpty={0} tools={tools} deleteTool={() => deleteTool(i)} />
+              <ToolsContainer key={i} logo={elem.image} name={elem.name} isEmpty={0} tools={tools} deleteTool={() => deleteTool(i, elem.name)} />
           )}
           {[...Array(notFilled)].map((x, i) =>
               <ToolsContainer logo={plus_logo} isEmpty={1} />
           )}
       </div>
-      {tools.length > 0 && <p className="product_selection_count">{tools.length} {tools.length === 1 ? "Product" : "Products"} added</p>}
+      <p className="product_selection_count">{tools.length} {tools.length <= 1 ? "Product" : "Products"} added</p>
     </div>
   )
 }
